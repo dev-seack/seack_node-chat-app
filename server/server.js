@@ -1,3 +1,9 @@
+/**
+ * Documentation
+ * --------------
+ * socket is the current used client
+ *
+ */
 const path = require("path");
 const express = require("express");
 const http = require("http");
@@ -13,6 +19,18 @@ app.use(express.static(publicPath));
 
 io.on("connection", (socket) => {
   console.log("new user connected");
+  // emits
+  socket.emit("newMessage", {
+    from: "Admin",
+    text: "Welcome to Chat-App",
+    createdAt: new Date().getTime()
+  });
+
+  socket.broadcast.emit("newMessage", {
+    from: "Admin",
+    text: "New user joined!",
+    createdAt: new Date().getTime()
+  });
 
   // listens
   socket.on("createMessage", (message) => {
