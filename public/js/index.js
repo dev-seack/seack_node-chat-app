@@ -14,6 +14,7 @@ socket.on("newMessage", function(newMessage) {
   li.text(`${newMessage.from}: ${newMessage.text}`);
 
   $("#messages").append(li);
+  $("[name=message]").val("");
 });
 
 $("#message_form").on("submit", function(e) {
