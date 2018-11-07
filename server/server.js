@@ -9,6 +9,8 @@ const express = require("express");
 const http = require("http");
 const socketIO = require("socket.io");
 
+const { generateMessage } = require("./utils/message");
+
 const publicPath = path.join(__dirname, "../public"); // clears the path
 const PORT = process.env.PORT || 3000;
 var app = express();
@@ -20,26 +22,20 @@ app.use(express.static(publicPath));
 io.on("connection", (socket) => {
   console.log("new user connected");
   // emits
-  socket.emit("newMessage", {
-    from: "Admin",
-    text: "Welcome to Chat-App",
-    createdAt: new Date().getTime()
-  });
+  socket.emit(
+    "newMessage",
+    generateMessage("Admin", "Welcome to the chat app")
+  );
 
-  socket.broadcast.emit("newMessage", {
-    from: "Admin",
-    text: "New user joined!",
-    createdAt: new Date().getTime()
-  });
+  socket.broadcast.emit(
+    "newMessage",
+    generateMessage("Admin", "New User joined")
+  );
 
   // listens
   socket.on("createMessage", (message) => {
     console.log("new Message", message);
-    io.emit("newMessage", {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    }); // emits a event to ervery connection
+    io.emit("newMessage", generateMessage(message.from, message.text)); // emits a event to ervery connection
   });
 
   socket.on("disconnect", () => {
