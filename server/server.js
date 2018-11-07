@@ -33,9 +33,10 @@ io.on("connection", (socket) => {
   );
 
   // listens
-  socket.on("createMessage", (message) => {
+  socket.on("createMessage", (message, callback) => {
     console.log("new Message", message);
     io.emit("newMessage", generateMessage(message.from, message.text)); // emits a event to ervery connection
+    callback("This is from the server");
   });
 
   socket.on("disconnect", () => {
