@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
   socket.on("createMessage", (message, callback) => {
     console.log("new Message", message);
     io.emit("newMessage", generateMessage(message.from, message.text)); // emits a event to ervery connection
-    callback("This is from the server");
+    callback();
   });
 
   socket.on("createLocationMessage", (coords) => {
