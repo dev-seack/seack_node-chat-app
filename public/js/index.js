@@ -8,10 +8,10 @@ socket.on("disconnect", function() {
   console.log("Disconected from Server");
 });
 
-socket.on("newMessage", function(newMessage) {
-  console.log("new Message", newMessage);
+socket.on("newMessage", function(message) {
+  var formatedTime = moment(message.createdAt).format("h:mm a");
   var li = jQuery("<li></li>");
-  li.text(`${newMessage.from}: ${newMessage.text}`);
+  li.text(`${message.from} ${formatedTime}: ${message.text}`);
 
   $("#messages").append(li);
 });
@@ -34,10 +34,11 @@ $("#message_form").on("submit", function(e) {
 });
 
 socket.on("newLocationMessage", function(message) {
+  var formatedTime = moment(message.createdAt).format("h:mm a");
   var li = jQuery("<li></li>");
   var a = jQuery('<a target="_blank">My current Location</a>');
 
-  li.text(`${message.from}: `);
+  li.text(`${message.from} ${formatedTime}: `);
   a.attr("href", message.url);
   li.append(a);
   $("#messages").append(li);
