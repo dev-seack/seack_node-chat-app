@@ -24,16 +24,25 @@ app.use(express.static(publicPath));
 
 io.on("connection", (socket) => {
   console.log("new user connected");
+  //console.log(io.sockets.adapter.rooms);
+  console.log(io.nsps["/chat_infra"]);
 
   // listens
   socket.on("join", (params, callback) => {
+    const userExist = users
+      .getUserList(params.room)
+      .filter((name) => name === params.name);
+
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback("Name and Room name are required");
+    } else if (userExist.length > 0) {
+      return callback(`${params.name} does already exist`);
     }
 
     socket.join(params.room);
 
     users.removeUser(socket.id);
+
     users.addUser(socket.id, params.name, params.room);
 
     // emits
